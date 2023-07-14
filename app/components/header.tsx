@@ -48,13 +48,13 @@ const Header: FC<Record<string, never>> = function () {
         )}
         <Navbar.Brand href="/">
           <Image
-            alt="Flowbite logo"
+            alt="JellyFi logo"
             height="24"
             src="/favicon.png"
             width="24"
           />
           <span className="self-center whitespace-nowrap px-3 text-xl font-semibold dark:text-white">
-            Flowbite
+            JellyFi
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2">

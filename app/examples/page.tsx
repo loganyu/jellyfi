@@ -59,9 +59,9 @@ import {
   HiViewBoards,
   HiX,
 } from "react-icons/hi";
-import Header from "./components/header";
-import Sidebar from "./components/sidebar";
-import { SidebarProvider } from "./context/SidebarContext";
+import Header from "../components/header";
+import Sidebar from "../components/sidebar";
+import { SidebarProvider } from "../context/SidebarContext";
 
 export default function Index(): JSX.Element {
   return (
