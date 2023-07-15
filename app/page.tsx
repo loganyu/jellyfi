@@ -105,19 +105,45 @@ function HomePage(): JSX.Element {
   console.log('summaries', summaries);
   console.log('collections', collections);
   console.log('nftMintsById', nftMintsById);
+  console.log('selectedCollection', selectedCollection)
 
   const portfolioInfo: any = {}
-  summaries.loanSummary.activeLoans.forEach((ls: any) => {
-    portfolioInfo[ls.orderBook] ||= {activeLoans: 0, totalLoaned: 0, totalEarnings: 0, activeOffers: 0, totalOffered: 0, floor: 0, value: 0}
-    portfolioInfo[ls.orderBook].activeLoans += 1;
-    portfolioInfo[ls.orderBook].totalLoaned += ls.amountSol;
-    portfolioInfo[ls.orderBook].totalEarnings += ls.earnings;
-  })
-  summaries.offerSummary.activeOffers.forEach((os: any) => {
-    portfolioInfo[os.orderBook] ||= {activeLoans: 0, totalLoaned: 0, totalEarnings: 0, activeOffers: 0, totalOffered: 0, floor: 0, value: 0}
-    portfolioInfo[os.orderBook].activeOffers += 1;
-    portfolioInfo[os.orderBook].totalOffered += os.amountSol;
-  })
+  let totalUnderWater = 0;
+  let totalAtRisk = 0;
+
+  if (collections.length > 0) {
+    collections.forEach((c: any) => {
+      portfolioInfo[c.id] = {
+        activeLoans: 0, 
+        totalLoaned: 0, 
+        totalEarnings: 0,
+        activeOffers: 0, 
+        totalOffered: 0, 
+        underWater: 0, 
+        atRisk: 0, 
+        floor: c.fp, 
+        value: 0
+      }
+    })
+
+    summaries.loanSummary.activeLoans.forEach((ls: any) => {
+      const info = portfolioInfo[ls.orderBook]
+      info.activeLoans += 1;
+      info.totalLoaned += ls.amountSol;
+      info.totalEarnings += ls.earnings;
+      if (ls.amountSol > info.floor) {
+        info.underWater += 1;
+        totalUnderWater += 1;
+        info.atRisk += ls.amountSol;
+        totalAtRisk += ls.amountSol;
+      }
+    })
+    summaries.offerSummary.activeOffers.forEach((os: any) => {
+      portfolioInfo[os.orderBook].activeOffers += 1;
+      portfolioInfo[os.orderBook].totalOffered += os.amountSol;
+    })
+  }
+  
   console.log('portfolioInfo', portfolioInfo)
 
   let activeLoans;
@@ -125,6 +151,10 @@ function HomePage(): JSX.Element {
     activeLoans = summaries.loanSummary.activeLoans.filter((loan: any) => loan.orderBook === selectedCollection.id)
   } else {
     activeLoans = summaries.loanSummary.activeLoans
+  }
+  
+  if (collections.length == 0) {
+    return <div>loading</div>
   }
 
 
@@ -209,38 +239,36 @@ function HomePage(): JSX.Element {
               </div>
               <div className="flex items-end flex-col">
                 <div className="text-md">Under Water</div>
-                <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalEarnings).toFixed(2) : summaries.loanSummary.totalEarnings.toFixed(2)}</div>
+                <div className="text-sm text-red-500">{selectedCollection ? portfolioInfo[selectedCollection.id].underWater : totalUnderWater}</div>
               </div>
               <div className="flex items-end flex-col">
                 <div className="text-md">At Risk</div>
-                <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalEarnings).toFixed(2) : summaries.loanSummary.totalEarnings.toFixed(2)}</div>
+                <div className="text-sm text-red-500">{selectedCollection ? portfolioInfo[selectedCollection.id].atRisk.toFixed(2) : totalAtRisk.toFixed(2)}</div>
               </div>
             </div>
           </div>
         </header>
-        <div className='flex border-b'>
-          <div className="flex flex-row justify-start space-x-4 w-full p-4">
-            <div className="flex items-end flex-col">
-              <div className="text-md">Floor</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].activeOffers) : summaries.offerSummary.activeOffers.length}</div>
+        <div className='flex border-b h-18'>
+          {selectedCollection &&
+            <div className="flex flex-row justify-start space-x-4 w-full p-4">
+              <div className="flex items-end flex-col">
+                <div className="text-md">Floor</div>
+                <div className="text-sm">{selectedCollection.fp.toFixed(2)}</div>
+              </div>
+              <div className="flex items-end flex-col">
+                <div className="text-md">Loans</div>
+                <div className="text-sm">{selectedCollection.loans.length}</div>
+              </div>
+              <div className="flex items-end flex-col">
+                <div className="text-md">Under Water</div>
+                <div className="text-sm text-red-500">{selectedCollection.countUnderWater}</div>
+              </div>
+              <div className="flex items-end flex-col">
+                <div className="text-md">Best Offer</div>
+                <div className="text-sm">{selectedCollection.offers.length > 0 ? selectedCollection.offers[0].amountSol.toFixed(2) : '-'}</div>
+              </div>
             </div>
-            <div className="flex items-end flex-col">
-              <div className="text-md">Loans</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalOffered) : summaries.offerSummary.totalSolOffered.toFixed(2)}</div>
-            </div>
-            <div className="flex items-end flex-col">
-              <div className="text-md">Last Day</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].activeLoans) : summaries.loanSummary.activeLoans.length}</div>
-            </div>
-            <div className="flex items-end flex-col">
-              <div className="text-md">Under water</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalLoaned).toFixed(2) : summaries.loanSummary.totalSolLoaned.toFixed(2)}</div>
-            </div>
-            <div className="flex items-end flex-col">
-              <div className="text-md">Best Offer</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalEarnings).toFixed(2) : summaries.loanSummary.totalEarnings.toFixed(2)}</div>
-            </div>
-          </div>
+          }
         </div>
         <div className="overflow-y-auto max-h-[680px]">
           <table className="w-full table-auto overflow-scroll">
@@ -268,7 +296,7 @@ function HomePage(): JSX.Element {
                       </td>
                       <td className="p-2 w-10 truncate">{name.substring(name.indexOf('#'))}</td>
                       <td className="p-2 w-10 truncate"><img src={PLATFORM_LOGOS[loan.platform.toLowerCase()]} /></td>
-                      <td className="p-2 text-right">{Number(loan.amountSol).toFixed(2)}</td>
+                      <td className={`{p-2 text-right ${loan.amountSol > portfolioInfo[loan.orderBook].floor && 'text-red-500'}`}>{Number(loan.amountSol).toFixed(2)}</td>
                       <td className="p-2 text-right">{Number(loan.earnings).toFixed(2)}</td>
                       <td className="p-2 text-right">{duration(loan.secondsUntilForeclosable, "seconds").humanize(true)}</td>
                       <td className="p-2 text-right">{duration(loan.duration, "seconds").humanize()}</td>

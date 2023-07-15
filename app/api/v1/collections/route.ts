@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mockResponse from "./mock_response"
 
 export async function GET(request: NextRequest) {
-    return NextResponse.json(mockResponse);
+    // return NextResponse.json(mockResponse);
 
     const collectionIds = request.nextUrl.searchParams.get("collectionIds")?.split(',') as string[];
 
@@ -12,8 +12,8 @@ export async function GET(request: NextRequest) {
     const data = await Promise.all(responses.map(response => response.json()));
     const collections = data.map(d => d.collection)
     collections.forEach((c, i) => {
-        delete c.loans
-        delete c.offers
+        // delete c.loans
+        // delete c.offers
         c.id = collectionIds[i]
     })
     console.log('collections', collections)
