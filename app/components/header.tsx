@@ -49,13 +49,10 @@ const Header: FC<Record<string, never>> = function () {
         <Navbar.Brand href="/">
           <Image
             alt="JellyFi logo"
-            height="24"
+            height="128"
             src="/favicon.png"
-            width="24"
+            width="128"
           />
-          <span className="self-center whitespace-nowrap px-3 text-xl font-semibold dark:text-white">
-            JellyFi
-          </span>
         </Navbar.Brand>
         <div className="flex md:order-2">
           <Navbar.Toggle />

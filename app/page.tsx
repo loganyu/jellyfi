@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 
 import { duration } from 'moment';
+import { FaStore, FaSkull } from "react-icons/fa"
 
 import Header from "./components/header";
 import Footer from "./components/footer";
 import { SidebarProvider } from "./context/SidebarContext";
-import { FaStore } from "react-icons/fa"
 
 const PLATFORM_LOGOS: any = {
   "citrus": "/logos/citrus-symbol-logo.png",
@@ -175,7 +175,7 @@ function HomePage(): JSX.Element {
                 <th className="p-2 text-right">Offered</th>
                 <th className="p-2 text-right">Loans</th>
                 <th className="p-2 text-right">Loaned</th>
-                <th className="p-2 text-right">Earnings</th>
+                <th className="p-2 text-right">Earning</th>
 
               </tr>
             </thead>
@@ -230,20 +230,20 @@ function HomePage(): JSX.Element {
                 <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].activeLoans) : summaries.loanSummary.activeLoans.length}</div>
               </div>
               <div className="flex items-end flex-col">
-                <div className="text-md">Loaned</div>
-                <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalLoaned).toFixed(2) : summaries.loanSummary.totalSolLoaned.toFixed(2)}</div>
-              </div>
-              <div className="flex items-end flex-col">
-                <div className="text-md">Earnings</div>
-                <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalEarnings).toFixed(2) : summaries.loanSummary.totalEarnings.toFixed(2)}</div>
-              </div>
-              <div className="flex items-end flex-col">
                 <div className="text-md">Under Water</div>
                 <div className="text-sm text-red-500">{selectedCollection ? portfolioInfo[selectedCollection.id].underWater : totalUnderWater}</div>
               </div>
               <div className="flex items-end flex-col">
+                <div className="text-md">Loaned</div>
+                <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalLoaned).toFixed(2) : summaries.loanSummary.totalSolLoaned.toFixed(2)}</div>
+              </div>
+              <div className="flex items-end flex-col">
                 <div className="text-md">At Risk</div>
                 <div className="text-sm text-red-500">{selectedCollection ? portfolioInfo[selectedCollection.id].atRisk.toFixed(2) : totalAtRisk.toFixed(2)}</div>
+              </div>
+              <div className="flex items-end flex-col">
+                <div className="text-md">Earning</div>
+                <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalEarnings).toFixed(2) : summaries.loanSummary.totalEarnings.toFixed(2)}</div>
               </div>
             </div>
           </div>
@@ -270,7 +270,7 @@ function HomePage(): JSX.Element {
             </div>
           }
         </div>
-        <div className="overflow-y-auto max-h-[680px]">
+        <div className="overflow-y-auto max-h-[790px]">
           <table className="w-full table-auto overflow-scroll">
             <thead>
               <tr className='text-left'>
@@ -278,7 +278,7 @@ function HomePage(): JSX.Element {
                 <th className="p-2"></th>
                 <th className="p-2 flex items-center justify-center h-10"><FaStore className="h-full"/></th>
                 <th className="p-2 text-right">Loaned</th>
-                <th className="p-2 text-right">Earnings</th>
+                <th className="p-2 text-right">Earning</th>
                 <th className="p-2 text-right">Ends</th>
                 <th className="p-2 text-right">Duration</th>
               </tr>
@@ -297,6 +297,7 @@ function HomePage(): JSX.Element {
                       <td className="p-2 w-10 truncate">{name.substring(name.indexOf('#'))}</td>
                       <td className="p-2 w-10 truncate"><img src={PLATFORM_LOGOS[loan.platform.toLowerCase()]} /></td>
                       <td className={`{p-2 text-right ${loan.amountSol > portfolioInfo[loan.orderBook].floor && 'text-red-500'}`}>{Number(loan.amountSol).toFixed(2)}</td>
+                      <td>{loan.isForeclosable && <FaSkull />}</td>
                       <td className="p-2 text-right">{Number(loan.earnings).toFixed(2)}</td>
                       <td className="p-2 text-right">{duration(loan.secondsUntilForeclosable, "seconds").humanize(true)}</td>
                       <td className="p-2 text-right">{duration(loan.duration, "seconds").humanize()}</td>
