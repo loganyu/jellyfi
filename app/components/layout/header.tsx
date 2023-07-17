@@ -1,6 +1,6 @@
 import { DarkThemeToggle, Navbar } from "flowbite-react";
 import { FC } from "react";
-import { useSidebarContext } from "../context/SidebarContext";
+import { useSidebarContext } from "../../context/SidebarContext";
 
 const Header: FC<Record<string, never>> = function () {
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
