@@ -278,6 +278,7 @@ function HomePage(): JSX.Element {
                 <th className="p-2"></th>
                 <th className="p-2 flex items-center justify-center h-10"><FaStore className="h-full"/></th>
                 <th className="p-2 text-right">Loaned</th>
+                <th className="p-2"></th>
                 <th className="p-2 text-right">Earning</th>
                 <th className="p-2 text-right">Ends</th>
                 <th className="p-2 text-right">Duration</th>
@@ -290,7 +291,10 @@ function HomePage(): JSX.Element {
                   const name = nftMintsById[loan.nftCollateralMint]?.content?.metadata?.name || '-'
                   const imgUrl = nftMintsById[loan.nftCollateralMint]?.content?.files?.[0]?.uri
                   return (
-                    <tr className={`hover:bg-gray-100 cursor-pointer dark:hover:bg-blue-800 text-xs ${loan === selectedCollection ? 'bg-gray-100 dark:bg-blue-600' : ''}`}>
+                    <tr className={`hover:bg-gray-100 cursor-pointer dark:hover:bg-blue-800 text-xs ${loan === selectedCollection ? 'bg-gray-100 dark:bg-blue-600' : ''}
+                    ${loan.isForeclosable && 'bg-gray-100 dark:bg-gray-700'}`}
+                    
+                      >
                       <td className="p-2 w-10 truncate">
                         <img src={imgUrl} className="object-cover h-6" />
                       </td>
@@ -299,8 +303,8 @@ function HomePage(): JSX.Element {
                       <td className={`{p-2 text-right ${loan.amountSol > portfolioInfo[loan.orderBook].floor && 'text-red-500'}`}>{Number(loan.amountSol).toFixed(2)}</td>
                       <td>{loan.isForeclosable && <FaSkull />}</td>
                       <td className="p-2 text-right">{Number(loan.earnings).toFixed(2)}</td>
-                      <td className="p-2 text-right">{duration(loan.secondsUntilForeclosable, "seconds").humanize(true)}</td>
-                      <td className="p-2 text-right">{duration(loan.duration, "seconds").humanize()}</td>
+                      <td className="p-2 text-right">{duration(loan.secondsUntilForeclosable, "seconds").humanize(true, { d: 30, h: 48, m: 60, s: 60})}</td>
+                      <td className="p-2 text-right">{duration(loan.duration, "seconds").humanize(false, { d: 30, h: 48, m: 60, s: 60})}</td>
                     </tr>
                   )
                 })}

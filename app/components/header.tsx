@@ -47,12 +47,9 @@ const Header: FC<Record<string, never>> = function () {
           </button>
         )}
         <Navbar.Brand href="/">
-          <Image
-            alt="JellyFi logo"
-            height="128"
-            src="/favicon.png"
-            width="128"
-          />
+          <span className="self-center whitespace-nowrap px-3 text-xl font-semibold dark:text-white">
+            JellyFi
+          </span>
         </Navbar.Brand>
         <div className="flex md:order-2">
           <Navbar.Toggle />
@@ -63,6 +60,7 @@ const Header: FC<Record<string, never>> = function () {
             Home
           </Navbar.Link>
           <Navbar.Link href="/">Lend</Navbar.Link>
+          <Navbar.Link href="/">Borrow</Navbar.Link>
         </Navbar.Collapse>
       </Navbar>
     </header>
