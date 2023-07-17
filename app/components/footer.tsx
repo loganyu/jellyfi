@@ -1,4 +1,3 @@
-import { Navbar } from "flowbite-react";
 import { FC } from "react";
 
 const Footer: FC<Record<string, never>> = function () {

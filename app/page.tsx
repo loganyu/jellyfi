@@ -195,7 +195,7 @@ function HomePage(): JSX.Element {
               {collections.map((collection: any) => {
                 console.log('collection', collection)
                 return (
-                  <tr className={`hover:bg-gray-100 cursor-pointer dark:hover:bg-blue-800 text-xs ${collection === selectedCollection ? 'bg-gray-100 dark:bg-blue-600' : ''}`}
+                  <tr key={collection.id} className={`hover:bg-gray-100 cursor-pointer dark:hover:bg-blue-800 text-xs ${collection === selectedCollection ? 'bg-gray-100 dark:bg-blue-600' : ''}`}
                     onClick={() => setSelectedCollection(collection)}>
                     <td className="p-2 w-10 truncate">{collection.name}</td>
                     <td className="p-2 text-right">{portfolioInfo[collection.id].activeOffers}</td>
@@ -291,15 +291,15 @@ function HomePage(): JSX.Element {
                   const name = nftMintsById[loan.nftCollateralMint]?.content?.metadata?.name || '-'
                   const imgUrl = nftMintsById[loan.nftCollateralMint]?.content?.files?.[0]?.uri
                   return (
-                    <tr className={`hover:bg-gray-100 cursor-pointer dark:hover:bg-blue-800 text-xs ${loan === selectedCollection ? 'bg-gray-100 dark:bg-blue-600' : ''}
+                    <tr key={loan.id} className={`hover:bg-gray-100 cursor-pointer dark:hover:bg-blue-800 text-xs ${loan === selectedCollection ? 'bg-gray-100 dark:bg-blue-600' : ''}
                     ${loan.isForeclosable && 'bg-gray-100 dark:bg-gray-700'}`}
                     
                       >
                       <td className="p-2 w-10 truncate">
-                        <img src={imgUrl} className="object-cover h-6" />
+                        <img src={imgUrl} className="object-cover h-6" alt="NFT picture" />
                       </td>
                       <td className="p-2 w-10 truncate">{name.substring(name.indexOf('#'))}</td>
-                      <td className="p-2 w-10 truncate"><img src={PLATFORM_LOGOS[loan.platform.toLowerCase()]} /></td>
+                      <td className="p-2 w-10 truncate"><img src={PLATFORM_LOGOS[loan.platform.toLowerCase()]} alt="Platform logo" /></td>
                       <td className={`{p-2 text-right ${loan.amountSol > portfolioInfo[loan.orderBook].floor && 'text-red-500'}`}>{Number(loan.amountSol).toFixed(2)}</td>
                       <td>{loan.isForeclosable && <FaSkull />}</td>
                       <td className="p-2 text-right">{Number(loan.earnings).toFixed(2)}</td>

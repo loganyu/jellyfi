@@ -826,8 +826,8 @@ function ProgressExample(): JSX.Element {
   return (
     <Progress
       progress={45}
-      label="Flowbite"
-      labelPosition="outside"
+      // label="Flowbite"
+      // labelPosition="outside"
       labelProgress
     />
   );

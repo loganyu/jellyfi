@@ -1,3 +1,7 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "ignorePatterns": ["**/examples/page.tsx"],
+  "rules": {
+    "@next/next/no-img-element": "off"
+  }
 }
