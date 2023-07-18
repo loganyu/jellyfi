@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import mockResponse from "./mock_response"
+// import mockResponse from "./mock_response"
 
 export async function GET(request: NextRequest) {
     // return NextResponse.json(mockResponse);
