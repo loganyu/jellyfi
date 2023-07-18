@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
         // delete c.offers
         c.id = collectionIds[i]
     })
-    console.log('collections', collections)
 
     return NextResponse.json(collections);
 }

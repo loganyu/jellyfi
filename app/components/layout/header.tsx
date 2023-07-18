@@ -1,10 +1,15 @@
 import { DarkThemeToggle, Navbar } from "flowbite-react";
 import { FC } from "react";
 import { useSidebarContext } from "../../context/SidebarContext";
+import WalletButton from "../WalletButton"
+
+import { useRouter, usePathname } from 'next/navigation'
 
 const Header: FC<Record<string, never>> = function () {
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
+  const router = useRouter()
+  const path =  usePathname()
 
   return (
     <header className="sticky top-0 z-20">
@@ -46,20 +51,19 @@ const Header: FC<Record<string, never>> = function () {
           </button>
         )}
         <Navbar.Brand href="/">
-          <span className="self-center whitespace-nowrap px-3 text-xl font-semibold dark:text-white">
+          <span className="w-64 self-center whitespace-nowrap px-3 text-xl font-semibold dark:text-white">
             JellyFi
           </span>
         </Navbar.Brand>
-        <div className="flex md:order-2">
-          <Navbar.Toggle />
+        <div className="w-64 flex md:order-2 justify-end">
+          <WalletButton />
           <DarkThemeToggle />
         </div>
         <Navbar.Collapse>
-          <Navbar.Link href="/" active>
+          <Navbar.Link className="cursor-pointer" active={path === '/'} onClick={() => router.push('/')}>
             Home
           </Navbar.Link>
-          <Navbar.Link href="/">Lend</Navbar.Link>
-          <Navbar.Link href="/">Borrow</Navbar.Link>
+          <Navbar.Link className="cursor-pointer" active={path === '/portfolio'}  onClick={() => router.push('/portfolio')}>Portfolio</Navbar.Link>
         </Navbar.Collapse>
       </Navbar>
     </header>

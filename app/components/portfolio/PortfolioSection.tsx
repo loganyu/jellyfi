@@ -1,20 +1,23 @@
 import { FC } from "react";
 
+import { useWallet } from '@solana/wallet-adapter-react';
+
 interface PortfolioSectionProps {
-    onClickCollection: (collection: any) => void;
-    collections: any;
-    portfolioInfo: any;
-    selectedCollection: any;
-  }
+  onClickCollection: (collection: any) => void;
+  collections: any;
+  portfolioInfo: any;
+  selectedCollection: any;
+}
 
 const PortfolioSection: FC<PortfolioSectionProps> = function ({onClickCollection, collections, portfolioInfo, selectedCollection}) {
+  const { publicKey } = useWallet();
 
   return (
     <>
       <header>
-          <div className='flex border-b'>
-          <h2 className="p-4 text-4xl font-bold text-center h-20">Portfolio</h2>
-          </div>
+        <div className='flex border-b items-center'>
+          <h2 className="p-4 text-4xl font-bold text-center h-20">{publicKey?.toString().slice(0, 4)}..{publicKey?.toString().slice(-4)}</h2>
+        </div>
       </header>
       <div className="overflow-auto">
         <table className="w-full">
