@@ -1,7 +1,7 @@
 import { useEffect, useState, FC } from "react";
 
 import moment from 'moment';
-import { FaStore, FaSkull, FaPeopleArrows } from "react-icons/fa"
+import { FaStore, FaSkull  } from "react-icons/fa"
 
 const PLATFORM_LOGOS: any = {
   "citrus": "/logos/citrus-symbol-logo.png",
