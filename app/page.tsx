@@ -2,12 +2,15 @@
 
 import { useWallet } from '@solana/wallet-adapter-react';
 
+import { Button } from "flowbite-react";
+
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 import { SidebarProvider } from "./context/SidebarContext";
 
 import WalletButton from "./components/WalletButton";
 
+import { useRouter } from 'next/navigation'
 
 export default function Index(): JSX.Element {
   return (
@@ -27,6 +30,7 @@ export default function Index(): JSX.Element {
 
 function HomePage(): JSX.Element {
   const { publicKey } = useWallet(); 
+  const router = useRouter();
 
   if (!publicKey) {
     return (
@@ -43,8 +47,11 @@ function HomePage(): JSX.Element {
     )
   } else {
     return (
-      <div className="flex flex-col items-center justify-center w-full dark:text-white">
+      <div className="flex flex-col items-center justify-center w-full dark:text-white mb-20">
         <h2 className="text-2xl mb-4">🪼 Hello {publicKey.toBase58().slice(0,4)}..{publicKey.toBase58().slice(-4)} 🪼</h2>
+        <Button outline gradientDuoTone="purpleToBlue" onClick={() => router.push('/portfolio')}>
+          View Portfolio
+        </Button>
       </div>
     )
   }
