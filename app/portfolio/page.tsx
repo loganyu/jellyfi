@@ -66,7 +66,6 @@ function PortfolioPage(): JSX.Element {
       ));
       const json = await response.json();
       setCollections(json);
-      setLoading(false);
     }
 
     const orderBookPubKeys = Array.from(new Set(summaries.loanSummary.activeLoans.map((al: any) => al.orderBook))) as string[]
@@ -123,7 +122,7 @@ function PortfolioPage(): JSX.Element {
     })
   }
   
-  if (loading) {
+  if (loading || ((summaries.loanSummary.totalSolLoaned > 0 || summaries.offerSummary.totalSolOffered > 0 ) && collections.length === 0)) {
     return (
     <div className='flex items-center justify-center h-full w-full'>
       <svg aria-hidden="true" className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
