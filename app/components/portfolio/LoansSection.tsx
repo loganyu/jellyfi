@@ -214,7 +214,7 @@ const LoansSection: FC<LoansSectionProps> = function ({summaries, portfolioInfo,
                       <td className={`p-2 text-right ${loan.amountSol > portfolioInfo[loan.orderBook].floor && 'text-red-500'}`}>{Number(loan.amountSol).toFixed(2)}</td>
                       <td>{loan.isForeclosable && <FaSkull />}</td>
                       <td className="p-2 text-right">{Number(loan.earnings).toFixed(2)}</td>
-                      <td className="p-2 text-right">forecloses {moment.duration(loan.secondsUntilForeclosable, "seconds").humanize(true, { d: 30, h: 48, m: 120, s: 60})}</td>
+                      <td className="p-2 text-right">{loan.secondsUntilForeclosable >= 0 ? "forecloses" : "foreclosed"} {moment.duration(loan.secondsUntilForeclosable, "seconds").humanize(true, { d: 30, h: 48, m: 120, s: 60})}</td>
                       <td className="p-2 text-right">{moment.duration(loan.duration, "seconds").humanize(false, { d: 30, h: 48, m: 60, s: 60})}</td>
                       <td className="p-2 w-10 truncate"><img src={PLATFORM_LOGOS[loan.platform.toLowerCase()]} alt="Platform logo" /></td>
                     </tr>
