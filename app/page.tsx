@@ -30,7 +30,7 @@ function HomePage(): JSX.Element {
 
   if (!publicKey) {
     return (
-      <div className="flex flex-col items-center justify-center w-full dark:text-white">
+      <div className="flex flex-col items-center justify-center w-full dark:text-white mb-20">
         <h1 className="text-4xl font-bold mb-4">🪼 Welcome to JellyFi!🪼</h1>
         <ul className="flex flex-col justify-around h-32 m-10">
           <li>View all your NFT loans across platforms</li>

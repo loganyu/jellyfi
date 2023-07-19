@@ -78,7 +78,7 @@ function PortfolioPage(): JSX.Element {
 
   if (!publicKey) {
     return (
-      <div className="flex flex-col items-center justify-center w-full dark:text-white">
+      <div className="flex flex-col items-center justify-center w-full dark:text-white mb-20">
         <h1 className="text-4xl font-bold mb-4">🪼 Connect Wallet to View Portfolio 🪼</h1>
         <WalletButton />
       </div>
