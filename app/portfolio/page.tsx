@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useWallet } from '@solana/wallet-adapter-react';
 
@@ -11,8 +11,7 @@ import { SidebarProvider } from "../context/SidebarContext";
 import PortfolioSection from "../components/portfolio/PortfolioSection"
 import LoansSection from "../components/portfolio/LoansSection"
 
-import { PublicKey } from '@solana/web3.js'
-
+import { useSearchParams, useRouter } from 'next/navigation'
 
 export default function Index(): JSX.Element {
   return (
@@ -32,6 +31,9 @@ export default function Index(): JSX.Element {
 
 function PortfolioPage(): JSX.Element {
   const { publicKey } = useWallet();
+  const router = useRouter();
+  const search = useSearchParams()
+  const pk = search.get('pk')
 
   const [summaries, setSummaries] = useState({
     loanSummary: {
@@ -48,36 +50,65 @@ function PortfolioPage(): JSX.Element {
   const [selectedCollection, setSelectedCollection] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const getData = async (publicKey: PublicKey) => {
-      setLoading(true);
-      const response = await fetch(`/api/v1/lender/loans?lender=${publicKey.toString()}`);
-      const summariesResponse = await response.json();
-      const orderBookPubKeys = Array.from(new Set(summariesResponse.loanSummary.activeLoans.map((al: any) => al.orderBook).concat(
-        summariesResponse.offerSummary.activeOffers.map((ao: any) => ao.orderBook)
-      ))) as string[]
-      if (orderBookPubKeys.length > 0) {
-        const response = await fetch('/api/v1/collections?' + new URLSearchParams(
-          { collectionIds: orderBookPubKeys.join(',') }
-        ));
-        const json = await response.json();
-        setCollections(json);
-      }
-      setSummaries(summariesResponse);
+  const getData = async (pubKeyString: string) => {
+    if (pubKeyString.length !== 44) {
       setLoading(false);
+      return
     }
+    setLoading(true);
+    const response = await fetch(`/api/v1/lender/loans?lender=${pubKeyString}`);
+    const summariesResponse = await response.json();
+    const orderBookPubKeys = Array.from(new Set(summariesResponse.loanSummary.activeLoans.map((al: any) => al.orderBook).concat(
+      summariesResponse.offerSummary.activeOffers.map((ao: any) => ao.orderBook)
+    ))) as string[]
+    if (orderBookPubKeys.length > 0) {
+      const response = await fetch('/api/v1/collections?' + new URLSearchParams(
+        { collectionIds: orderBookPubKeys.join(',') }
+      ));
+      const json = await response.json();
+      setCollections(json);
+    }
+    setSummaries(summariesResponse);
+    setLoading(false);
+  }
 
-    if (publicKey) {
-      getData(publicKey);
+  useEffect(() => {
+    if (pk) {
+      getData(pk as string);
+    }
+  }, [pk])
+
+  useEffect(() => {
+    if (publicKey && !pk) {
+      getData(publicKey.toBase58());
     }
   }, [publicKey])
 
 
-  if (!publicKey) {
+  const handleSubmitPublicKey = (event: React.SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const pubKeyString = event.currentTarget['publicKey'].value;
+
+    router.push('/portfolio?pk=' + pubKeyString)
+  };
+
+  if (!publicKey && !pk) {
     return (
-      <div className="flex flex-col items-center justify-center w-full dark:text-white pb-20">
+      <div className="flex flex-col items-center justify-center w-full dark:text-white space-y-2">
         <h1 className="text-4xl font-bold mb-4">🪼 Connect Wallet to View Portfolio 🪼</h1>
         <WalletButton />
+        <div>or</div>
+        <form onSubmit={handleSubmitPublicKey} className='w-1/3'>   
+          <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                  </svg>
+              </div>
+              <input type="search" id="publicKey" minLength={44} maxLength={44} className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
+              <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+          </div>
+        </form>
       </div>
     )
   }
@@ -137,6 +168,7 @@ function PortfolioPage(): JSX.Element {
       <section className='w-1/3 flex-grow'>
         <PortfolioSection 
           onClickCollection={(collection: any) => setSelectedCollection(collection)} 
+          onPubKeySubmit={(pubKey: React.SyntheticEvent<HTMLFormElement>) => handleSubmitPublicKey(pubKey)}
           portfolioInfo={portfolioInfo} 
           selectedCollection={selectedCollection} 
           collections={collections}
