@@ -12,8 +12,6 @@ export async function GET(request: NextRequest) {
     const data = await Promise.all(responses.map(response => response.json()));
     const collections = data.map(d => d.collection)
     collections.forEach((c, i) => {
-        // delete c.loans
-        // delete c.offers
         c.id = collectionIds[i]
     })
 

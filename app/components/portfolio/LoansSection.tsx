@@ -79,31 +79,31 @@ const LoansSection: FC<LoansSectionProps> = function ({summaries, portfolioInfo,
           <div className="flex flex-row justify-end space-x-4 w-full p-4">
             <div className="flex items-end flex-col">
               <div className="text-md">Offers</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].activeOffers) : summaries.offerSummary.activeOffers.length}</div>
+              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id]?.activeOffers) : summaries.offerSummary.activeOffers.length}</div>
             </div>
             <div className="flex items-end flex-col">
               <div className="text-md">Offered</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalOffered) : summaries.offerSummary.totalSolOffered.toFixed(2)}</div>
+              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id]?.totalOffered) : summaries.offerSummary.totalSolOffered.toFixed(2)}</div>
             </div>
             <div className="flex items-end flex-col">
               <div className="text-md">Loans</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].activeLoans) : summaries.loanSummary.activeLoans.length}</div>
+              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id]?.activeLoans) : summaries.loanSummary.activeLoans.length}</div>
             </div>
             <div className="flex items-end flex-col">
               <div className="text-md">Under Water</div>
-              <div className="text-sm text-red-500">{selectedCollection ? portfolioInfo[selectedCollection.id].underWater : totalUnderWater}</div>
+              <div className="text-sm text-red-500">{selectedCollection ? portfolioInfo[selectedCollection.id]?.underWater : totalUnderWater}</div>
             </div>
             <div className="flex items-end flex-col">
               <div className="text-md">Loaned</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalLoaned).toFixed(2) : summaries.loanSummary.totalSolLoaned.toFixed(2)}</div>
+              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id]?.totalLoaned).toFixed(2) : summaries.loanSummary.totalSolLoaned.toFixed(2)}</div>
             </div>
             <div className="flex items-end flex-col">
               <div className="text-md">At Risk</div>
-              <div className="text-sm text-red-500">{selectedCollection ? portfolioInfo[selectedCollection.id].atRisk.toFixed(2) : totalAtRisk.toFixed(2)}</div>
+              <div className="text-sm text-red-500">{selectedCollection ? portfolioInfo[selectedCollection.id]?.atRisk.toFixed(2) : totalAtRisk.toFixed(2)}</div>
             </div>
             <div className="flex items-end flex-col">
               <div className="text-md">Interest</div>
-              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id].totalEarnings).toFixed(2) : summaries.loanSummary.totalEarnings.toFixed(2)}</div>
+              <div className="text-sm">{selectedCollection ? Number(portfolioInfo[selectedCollection.id]?.totalEarnings).toFixed(2) : summaries.loanSummary.totalEarnings.toFixed(2)}</div>
             </div>
           </div>
         </div>
@@ -254,6 +254,26 @@ const LoansSection: FC<LoansSectionProps> = function ({summaries, portfolioInfo,
                     </tr>
                   )
                 })}
+            </tbody>
+          </table>,
+        history:
+          <table className="w-full table-auto overflow-scroll">
+            <thead>
+              <tr className='text-left'>
+                <th className="p-2">Collection</th>
+                <th className="p-2 text-right">Offer</th>
+                <th className="p-2"></th>
+                <th className="p-2 text-right">Interest</th>
+                <th className="p-2 text-right">Status</th>
+                <th className="p-2"><FaStore className="h-full"/></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className={`hover:bg-gray-100 cursor-pointer dark:hover:bg-blue-800 text-xs`}>
+                <td className="w-10 p-2 truncate">
+                  Coming Soon
+                </td>
+              </tr>
             </tbody>
           </table>
         }[selectedTab]}

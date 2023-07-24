@@ -66,9 +66,9 @@ const PortfolioSection: FC<PortfolioSectionProps> = function ({onClickCollection
                 return (
                     <tr key={collection.id} className={`hover:bg-gray-100 cursor-pointer dark:hover:bg-blue-800 text-xs ${collection === selectedCollection ? 'bg-gray-100 dark:bg-blue-600' : ''}`}
                     onClick={() => onClickCollection(collection)}>
-                    <td className="p-2 w-10 truncate">{collection.name}</td>
+                    <td className="p-2 w-10 truncate">{collection.name.slice(0,19)}</td>
                     <td className="p-2 text-right">{portfolioInfo[collection.id].activeOffers}</td>
-                    <td className="p-2 text-right">{portfolioInfo[collection.id].totalOffered}</td>
+                    <td className="p-2 text-right">{portfolioInfo[collection.id].totalOffered.toFixed(2)}</td>
                     <td className="p-2 text-right">{portfolioInfo[collection.id].activeLoans}</td>
                     <td className="p-2 text-right">{Number(portfolioInfo[collection.id].totalLoaned).toFixed(2)}</td>
                     <td className="p-2 text-right">{Number(portfolioInfo[collection.id].totalEarnings).toFixed(2)}</td>
